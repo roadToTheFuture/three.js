@@ -6,7 +6,6 @@ export default class Three {
     this.scene = null;
     this.camera = null;
     this.renderer = null;
-    this.model = null;
   }
 
   init() {
@@ -38,27 +37,29 @@ export default class Three {
 
   sceneConfigInit() {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.camera.position.set(0, 0, 400);
+    this.camera.position.set(0, 0, 100);
     this.camera.lookAt(0, 0, 0);
   }
 
   modelInit() {
-    const materialColor = { color: 0x00ff00 };
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial(materialColor);
+    const materialParameters = { color: "tomato" };
+    const material = new THREE.LineBasicMaterial(materialParameters);
+    const geometry = new THREE.BufferGeometry().setFromPoints(this.vector);
 
-    this.model = new THREE.Mesh(geometry, material);
+    const line = new THREE.Line(geometry, material);
 
-    this.scene.add(this.model);
-    this.camera.position.z = 5;
+    this.scene.add(line);
+  }
+
+  get vector() {
+    return [
+      new THREE.Vector3(-10, 0, 0),
+      new THREE.Vector3(0, 10, 0),
+      new THREE.Vector3(10, 0, 0),
+    ];
   }
 
   animate() {
-    requestAnimationFrame(this.animate.bind(this));
-
-    this.model.rotation.x += 0.01;
-    this.model.rotation.y += 0.01;
-
     this.renderer.render(this.scene, this.camera);
   }
 }
